@@ -45,12 +45,11 @@ runs:
     - name: Create or update comment on PR
       uses: peter-evans/create-or-update-comment@v1
       with:
-        token: ${{ env.GH_TOKEN }}
+        token: ${{ inputs.token }}
         issue-number: ${{ github.event.pull_request.number }}
         body: >
           <!-- gas-comparison-action -->
 
           ${{ env.COMPARISON }}
       env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         COMPARISON: ${{ steps.compare_gas_snapshots.outputs.comparison }}
