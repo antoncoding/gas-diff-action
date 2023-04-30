@@ -37,8 +37,9 @@ runs:
       shell: bash
 
     - name: Install Foundry
-      run: npm install -g foundry
-      shell: bash
+      uses: onbjerg/foundry-toolchain@v1
+      with:
+        version: nightly
 
     - name: Run forge snapshot
       run: forge snapshot
