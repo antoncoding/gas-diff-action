@@ -39,7 +39,9 @@ runs:
     - name: Compare gas snapshots
       id: compare_gas_snapshots
       run: |
-        echo "::set-output name=comparison::$(python ${{ github.action_path }}/scripts/compare_gas_snapshot.py .gas-snapshot-base .gas-snapshot)"
+        output=$(python ${{ github.action_path }}/scripts/compare_gas_snapshots.py .gas-snapshot-base .gas-snapshot)
+        comparison=$(echo $output | jq -r '.comparison')
+        echo "COMPARISON=$comparison" >> $GITHUB_ENV
       shell: bash
 
     - name: Comment on PR

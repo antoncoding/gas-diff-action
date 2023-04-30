@@ -51,4 +51,5 @@ def compare_gas_snapshots(base_file, pr_file):
 if __name__ == "__main__":
     base_file = sys.argv[1]
     pr_file = sys.argv[2]
-    print(compare_gas_snapshots(base_file, pr_file))
+    comparison = compare_gas_snapshots(base_file, pr_file)
+    print(json.dumps({"comparison": comparison}))
