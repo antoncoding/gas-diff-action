@@ -10,9 +10,6 @@ inputs:
   head_ref:
     description: 'Head branch reference'
     required: true
-outputs:
-  comparison:
-    description: 'Gas comparison message'
 runs:
   using: 'composite'
   steps:
@@ -41,18 +38,9 @@ runs:
         python ${{ github.action_path }}/scripts/compare_gas_snapshots.py .gas-snapshot-base .gas-snapshot > comparison_output.txt
       shell: bash
 
-    - name: Set comparison output as env variable
-      run: echo "COMPARISON_OUTPUT=$(cat comparison_output.txt)" >> $GITHUB_ENV
-      shell: bash
-
     - name: Create or update comment on PR
       uses: peter-evans/create-or-update-comment@v3
       with:
         token: ${{ inputs.token }}
         issue-number: ${{ github.event.pull_request.number }}
-        body: |
-          <!-- gas-comparison-action -->
-
-          ```
-          ${{ env.COMPARISON_OUTPUT }}
-          ```
+        body-path: 'comparison_output.txt'
