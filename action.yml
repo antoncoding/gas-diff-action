@@ -39,16 +39,18 @@ runs:
     - name: Compare gas snapshots
       id: compare_gas_snapshots
       run: |
-        output=$(python ${{ github.action_path }}/scripts/compare_gas_snapshots.py .gas-snapshot-base .gas-snapshot)
-        comparison=$(echo $output | jq -r '.comparison')
-        echo "COMPARISON=$comparison" >> $GITHUB_ENV
+        python ${{ github.action_path }}/scripts/compare_gas_snapshots.py .gas-snapshot-base .gas-snapshot > comparison_output.txt
       shell: bash
 
-    - name: Comment on PR
+    - name: Create or update comment on PR
       uses: peter-evans/create-or-update-comment@v1
       with:
-        GITHUB_TOKEN: ${{ inputs.token }}
+        token: ${{ env.GH_TOKEN }}
         issue-number: ${{ github.event.pull_request.number }}
-        body: |
+        body: >
           <!-- gas-comparison-action -->
-          ${{ steps.compare_gas_snapshots.outputs.comparison }}
+
+          ${{ env.COMPARISON }}
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        COMPARISON: ${{ steps.compare_gas_snapshots.outputs.comparison }}
