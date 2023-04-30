@@ -36,15 +36,6 @@ runs:
       run: git checkout ${{ inputs.head_ref }}
       shell: bash
 
-    - name: Install Foundry
-      uses: onbjerg/foundry-toolchain@v1
-      with:
-        version: nightly
-
-    - name: Run forge snapshot
-      run: forge snapshot
-      shell: bash
-
     - name: Compare gas snapshots
       id: compare_gas_snapshots
       run: |
