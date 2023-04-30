@@ -29,7 +29,7 @@ def compare_gas_snapshots(base_file, pr_file):
                 continue
             has_diff = True
             percentage_change = (diff / base_gas) * 100
-            emoji = ":green_circle:" if diff < 0 else ":red_circle:"
+            emoji = ":recycle:" if diff < 0 else ":fuelpump:"
             comparison += f"| {test_name} | {emoji} {diff} | {percentage_change:.2f}% |\n"
 
     return comparison if has_diff else ""
