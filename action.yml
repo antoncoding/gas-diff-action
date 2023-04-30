@@ -43,6 +43,7 @@ runs:
 
     - name: Set comparison output as env variable
       run: echo "COMPARISON_OUTPUT=$(cat comparison_output.txt)" >> $GITHUB_ENV
+      shell: bash
 
     - name: Create or update comment on PR
       uses: peter-evans/create-or-update-comment@v3
