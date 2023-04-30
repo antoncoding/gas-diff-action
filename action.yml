@@ -37,19 +37,21 @@ runs:
       shell: bash
 
     - name: Compare gas snapshots
-      id: compare_gas_snapshots
       run: |
         python ${{ github.action_path }}/scripts/compare_gas_snapshots.py .gas-snapshot-base .gas-snapshot > comparison_output.txt
       shell: bash
 
+    - name: Set comparison output as env variable
+      run: echo "COMPARISON_OUTPUT=$(cat comparison_output.txt)" >> $GITHUB_ENV
+
     - name: Create or update comment on PR
-      uses: peter-evans/create-or-update-comment@v1
+      uses: peter-evans/create-or-update-comment@v3
       with:
         token: ${{ inputs.token }}
         issue-number: ${{ github.event.pull_request.number }}
-        body: >
+        body: |
           <!-- gas-comparison-action -->
 
           ```
-          $(cat comparison_output.txt)
+          ${{ env.COMPARISON_OUTPUT }}
           ```
