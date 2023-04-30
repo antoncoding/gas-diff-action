@@ -43,7 +43,10 @@ runs:
       shell: bash
 
     - name: Comment on PR
-      uses: thollander/actions-comment-pull-request@v1
+      uses: peter-evans/create-or-update-comment@v1
       with:
         GITHUB_TOKEN: ${{ inputs.token }}
-        message: ${{ steps.compare_gas_snapshots.outputs.comparison }}
+        issue-number: ${{ github.event.pull_request.number }}
+        body: |
+          <!-- gas-comparison-action -->
+          ${{ steps.compare_gas_snapshots.outputs.comparison }}
