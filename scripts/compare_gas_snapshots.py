@@ -33,7 +33,7 @@ def compare_gas_snapshots(base_file, pr_file):
             diff_sign = "+" if diff > 0 else ""
             comparison += f"| {test_name} | {emoji} {diff_sign}{diff} | {percentage_change:.2f}% |\n"
 
-    return comparison if has_diff else ""
+    return comparison if has_diff else "Gas usage not changed!"
 
 if __name__ == "__main__":
     base_file = sys.argv[1]
