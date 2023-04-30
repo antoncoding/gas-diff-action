@@ -42,13 +42,6 @@ runs:
         python ${{ github.action_path }}/scripts/compare_gas_snapshots.py .gas-snapshot-base .gas-snapshot > comparison_output.txt
       shell: bash
 
-    - name: Read comparison output
-      id: read_comparison_output
-      run: |
-        comparison=$(cat comparison_output.txt)
-        echo "::set-output name=comparison::$comparison"
-      shell: bash
-
     - name: Create or update comment on PR
       uses: peter-evans/create-or-update-comment@v1
       with:
@@ -57,4 +50,6 @@ runs:
         body: >
           <!-- gas-comparison-action -->
 
-          ${{ steps.read_comparison_output.outputs.comparison }}
+          ```
+          $(cat comparison_output.txt)
+          ```
