@@ -22,18 +22,29 @@ def compare_gas_snapshots(base_file, pr_file):
     base_gas_usage = parse_gas_snapshot_file(base_file)
     pr_gas_usage = parse_gas_snapshot_file(pr_file)
 
-    comparison = "Gas usage comparison:\n\n"
-    comparison += "| Test Name | Gas Diff | Percentage Change |\n"
-    comparison += "|-----------|----------|-------------------|\n"
+    comparison = ""
+    has_diff = False
     for test_name, base_gas in base_gas_usage.items():
         pr_gas = pr_gas_usage.get(test_name, None)
         if pr_gas is not None:
             diff = pr_gas - base_gas
-            if diff == 0:
-                continue
-            percentage_diff = round((diff / base_gas) * 100, 2)
-            sign = "+" if diff > 0 else ""
-            comparison += f"| {test_name} | {sign}{diff} | {sign}{percentage_diff}% |\n"
+            if diff != 0:
+                has_diff = True
+                break
+
+    if has_diff:
+        comparison += "Gas usage comparison:\n\n"
+        comparison += "| Test Name | Gas Diff | Percentage Change |\n"
+        comparison += "|-----------|----------|-------------------|\n"
+        for test_name, base_gas in base_gas_usage.items():
+            pr_gas = pr_gas_usage.get(test_name, None)
+            if pr_gas is not None:
+                diff = pr_gas - base_gas
+                if diff == 0:
+                    continue
+                percentage_diff = round((diff / base_gas) * 100, 2)
+                sign = "+" if diff > 0 else ""
+                comparison += f"| {test_name} | {sign}{diff} | {sign}{percentage_diff}% |\n"
 
     return comparison
 
