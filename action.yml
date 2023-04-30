@@ -4,16 +4,41 @@ inputs:
   token:
     description: 'GitHub token'
     required: true
+  base_ref:
+    description: 'Base branch reference'
+    required: true
+  head_ref:
+    description: 'Head branch reference'
+    required: true
 outputs:
   comparison:
     description: 'Gas comparison message'
 runs:
   using: 'composite'
   steps:
-    - name: Install Foundry
-      uses: onbjerg/foundry-toolchain@v1
+    - name: Checkout PR branch
+      uses: actions/checkout@v2
       with:
-        version: nightly
+        ref: ${{ inputs.head_ref }}
+        fetch-depth: 0
+
+    - name: Checkout base branch
+      run: |
+        git fetch origin ${{ inputs.base_ref }}
+        git checkout ${{ inputs.base_ref }}
+      shell: bash
+
+    - name: Save base branch .gas-snapshot
+      run: cp .gas-snapshot .gas-snapshot-base
+      shell: bash
+
+    - name: Switch back to PR branch
+      run: git checkout ${{ inputs.head_ref }}
+      shell: bash
+
+    - name: Install Foundry
+      run: npm install -g foundry
+      shell: bash
 
     - name: Run forge snapshot
       run: forge snapshot
@@ -22,7 +47,7 @@ runs:
     - name: Compare gas snapshots
       id: compare_gas_snapshots
       run: |
-        echo "::set-output name=comparison::$(python ${{ github.action_path }}/scripts/compare_gas_snapshot.py .gas-snapshot-base .gas-snapshot)"
+        echo "::set-output name=comparison::$(python ${{ github.action_path }}/scripts/compare_gas_snapshots.py .gas-snapshot-base .gas-snapshot)"
       shell: bash
 
     - name: Comment on PR
