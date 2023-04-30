@@ -1,0 +1,32 @@
+name: 'Gas Comparison Action'
+description: 'Compares gas usage in Solidity projects using Foundry and comments the changes on the PR'
+inputs:
+  token:
+    description: 'GitHub token'
+    required: true
+outputs:
+  comparison:
+    description: 'Gas comparison message'
+runs:
+  using: 'composite'
+  steps:
+    - name: Install Foundry
+      uses: onbjerg/foundry-toolchain@v1
+      with:
+        version: nightly
+
+    - name: Run forge snapshot
+      run: forge snapshot
+      shell: bash
+
+    - name: Compare gas snapshots
+      id: compare_gas_snapshots
+      run: |
+        echo "::set-output name=comparison::$(python ${{ github.action_path }}/scripts/compare_gas_snapshots.py .gas-snapshot-base .gas-snapshot)"
+      shell: bash
+
+    - name: Comment on PR
+      uses: thollander/actions-comment-pull-request@v1
+      with:
+        GITHUB_TOKEN: ${{ inputs.token }}
+        message: ${{ steps.compare_gas_snapshots.outputs.comparison }}
