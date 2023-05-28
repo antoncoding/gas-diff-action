@@ -25,12 +25,31 @@ runs:
         git checkout ${{ inputs.base_ref }}
       shell: bash
 
+    - name: Install Foundry
+      uses: onbjerg/foundry-toolchain@v1
+      with:
+        version: nightly
+
+    - name: Ensure .gas-snapshot exists
+      run: |
+        if [ ! -f .gas-snapshot ]; then
+          forge snapshot
+        fi
+      shell: bash
+
     - name: Save base branch .gas-snapshot
       run: cp .gas-snapshot .gas-snapshot-base
       shell: bash
 
     - name: Switch back to PR branch
       run: git checkout ${{ inputs.head_ref }}
+      shell: bash
+
+    - name: Ensure .gas-snapshot exists on PR branch
+      run: |
+        if [ ! -f .gas-snapshot ]; then
+          forge snapshot
+        fi
       shell: bash
 
     - name: Compare gas snapshots
