@@ -19,8 +19,9 @@ def compare_gas_snapshots(base_file, pr_file):
     base_gas_usage = parse_gas_snapshot_file(base_file)
     pr_gas_usage = parse_gas_snapshot_file(pr_file)
 
-    comparison = "Gas usage comparison:\n\n| Test Name | Gas Diff | Percentage Change |\n| --- | --- | --- |\n"
+    comparison = "Gas usage comparison:\n\n| Suite | Case | Gas Diff | Percentage Change |\n| --- | --- | --- | --- |\n"
     has_diff = False
+    prev_suite = ""
     for test_name, base_gas in base_gas_usage.items():
         pr_gas = pr_gas_usage.get(test_name, None)
         if pr_gas is not None:
@@ -31,7 +32,20 @@ def compare_gas_snapshots(base_file, pr_file):
             percentage_change = (diff / base_gas) * 100
             emoji = ":recycle:" if diff < 0 else ":fuelpump:"
             diff_sign = "+" if diff > 0 else ""
-            comparison += f"| `{test_name}` | {emoji} {diff_sign}{diff} | {percentage_change:.2f}% |\n"
+
+            # Split test_name into suite and case
+            suite, case = test_name.split(":")
+            case = case[case.lower().find("test"):].replace("()","")  # Excluding anything before "test" and "()"
+            
+            if suite == prev_suite:
+                suite = ""
+            else:
+                prev_suite = suite
+
+            # wrap with `` if suite is not empty
+            suite_final = f"`{suite}`" if suite != "" else ""
+
+            comparison += f"| {suite_final} | `{case}` | {emoji} {diff_sign}{diff} | {percentage_change:.2f}% |\n"
 
     return comparison if has_diff else "Gas usage not changed!"
 
