@@ -26,9 +26,9 @@ runs:
       shell: bash
 
     - name: Install Foundry
-        uses: onbjerg/foundry-toolchain@v1
-        with:
-          version: nightly
+      uses: onbjerg/foundry-toolchain@v1
+      with:
+        version: nightly
 
     - name: Ensure .gas-snapshot exists
       run: |
