@@ -25,6 +25,11 @@ runs:
         git checkout ${{ inputs.base_ref }}
       shell: bash
 
+    - name: Install Foundry
+        uses: onbjerg/foundry-toolchain@v1
+        with:
+          version: nightly
+
     - name: Ensure .gas-snapshot exists
       run: |
         if [ ! -f .gas-snapshot ]; then
