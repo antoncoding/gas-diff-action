@@ -89,3 +89,28 @@ fn main() {
     let pr_file = &args[2];
     println!("{}", compare_gas_snapshots(base_file, pr_file));
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::collections::BTreeMap;
+
+    #[test]
+    fn test_parse_gas_snapshot_file() {
+        let mut expected_gas_usage = BTreeMap::new();
+        expected_gas_usage.insert("Suite1:test1()".to_string(), 100);
+        expected_gas_usage.insert("Suite1:test2()".to_string(), 200);
+
+        let gas_usage = parse_gas_snapshot_file("test-cases/.test-snapshot1.txt");
+
+        assert_eq!(gas_usage, expected_gas_usage);
+    }
+
+    #[test]
+    fn test_compare_gas_snapshots() {
+        let comparison = compare_gas_snapshots("test-cases/.test-snapshot1.txt", "test-cases/.test-snapshot2.txt");
+
+        let expected_comparison = "Gas usage comparison:\n\n| Suite | Case | Gas Diff | Percentage Change |\n| --- | --- | --- | --- |\n| `Suite1` | `test1` | :fuelpump: +50 | 50.00% |\n";
+        assert_eq!(comparison, expected_comparison);
+    }
+}

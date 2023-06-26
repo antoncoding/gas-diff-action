@@ -1,0 +1,2 @@
+Suite1:test1() (gas: 100)
+Suite1:test2() (gas: 200)
