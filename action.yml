@@ -52,10 +52,23 @@ runs:
         fi
       shell: bash
 
-    - name: Compare gas snapshots
-      run: |
-        python ${{ github.action_path }}/scripts/compare_gas_snapshots.py .gas-snapshot-base .gas-snapshot > comparison_output.txt
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: stable
+        override: true
+
+    - name: Build
       shell: bash
+      run: | 
+        cd ${{ github.action_path }}
+        cargo build --release
+
+    - name: Compare gas snapshots
+      shell: bash
+      run: |
+        ${{ github.action_path }}//target/release/github-gas-action .gas-snapshot-base .gas-snapshot > comparison_output.txt
 
     - name: Find Comment
       uses: peter-evans/find-comment@v2
