@@ -34,7 +34,7 @@ jobs:
 
     steps:
       - name: Run Gas Comparison
-        uses: antoncoding/gas-diff-action@v1.2.0
+        uses: antoncoding/gas-diff-action@v2.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           base_ref: ${{ github.base_ref }}
