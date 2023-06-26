@@ -61,12 +61,14 @@ runs:
 
     - name: Build
       shell: bash
-      run: cargo build --release
+      run: | 
+        cd ${{ github.action_path }}
+        cargo build --release
 
     - name: Compare gas snapshots
       shell: bash
       run: |
-        ./target/release/github-gas-action .gas-snapshot-base .gas-snapshot > comparison_output.txt
+        ${{ github.action_path }}//target/release/github-gas-action .gas-snapshot-base .gas-snapshot > comparison_output.txt
 
     - name: Find Comment
       uses: peter-evans/find-comment@v2
