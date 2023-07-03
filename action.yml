@@ -44,7 +44,7 @@ runs:
 
     - name: Switch back to PR branch
       run: |
-        git checkout –-force ${{ inputs.head_ref }}
+        git checkout --force ${{ inputs.head_ref }}
       shell: bash
 
     - name: Ensure .gas-snapshot exists on PR branch
