@@ -38,11 +38,13 @@ runs:
       shell: bash
 
     - name: Save base branch .gas-snapshot
-      run: cp .gas-snapshot .gas-snapshot-base
+      run: |
+        cp .gas-snapshot .gas-snapshot-base
       shell: bash
 
     - name: Switch back to PR branch
-      run: git checkout ${{ inputs.head_ref }}
+      run: |
+        git checkout --force ${{ inputs.head_ref }}
       shell: bash
 
     - name: Ensure .gas-snapshot exists on PR branch
