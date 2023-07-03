@@ -38,11 +38,15 @@ runs:
       shell: bash
 
     - name: Save base branch .gas-snapshot
-      run: cp .gas-snapshot .gas-snapshot-base
+      run: |
+        cp .gas-snapshot .gas-snapshot-base
+        git add .gas-snapshot-base
+        git commit -m "Temporary snapshot for base branch"
       shell: bash
 
     - name: Switch back to PR branch
-      run: git checkout ${{ inputs.head_ref }}
+      run: |
+        git checkout ${{ inputs.head_ref }}
       shell: bash
 
     - name: Ensure .gas-snapshot exists on PR branch
@@ -86,3 +90,10 @@ runs:
         issue-number: ${{ github.event.pull_request.number }}
         body-path: 'comparison_output.txt'
         edit-mode: replace
+
+    - name: Cleanup
+      run: |
+        git checkout ${{ inputs.base_ref }}
+        git reset --hard HEAD^
+        git checkout ${{ inputs.head_ref }}
+      shell: bash
