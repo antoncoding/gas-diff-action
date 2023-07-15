@@ -1,15 +1,10 @@
 # Gas Diff Action
 
-<!-- <p align="center">
-  <img src="path/to/your/logo.png" alt="Gas Diff Action Logo" width="200"/>
-</p>
-
-<p align="center">
-  <a href="https://github.com/antoncoding/gas-diff-action/actions"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/antoncoding/gas-diff-action/CI?style=flat-square"></a>
-  <a href="https://github.com/antoncoding/gas-diff-action/blob/master/LICENSE"><img alt="GitHub License" src="https://img.shields.io/github/license/antoncoding/gas-diff-action?style=flat-square"></a>
-</p> -->
-
 Gas Diff Action is a GitHub Action that compares gas usage in Solidity projects using Foundry and comments the changes on the PR.
+
+## Preview
+
+![](./docs/imgs/screenshot.png)
 
 ## Usage
 
