@@ -23,6 +23,11 @@ on:
       - opened
       - synchronize
 
+# Set the job-level permissions
+permissions:
+  pull-requests: write
+  contents: read
+
 jobs:
   gas_comparison:
     runs-on: ubuntu-latest
@@ -36,8 +41,21 @@ jobs:
           head_ref: ${{ github.head_ref }}
 ```
 
-Commit and push your changes to the repository.
-Now, Gas Diff Action will automatically compare gas usage for Solidity contracts in your repository and comment the changes on the PR whenever a pull request is opened or updated.
+## Debugging
+
+If you encounter issues with the action, particularly related to permissions, follow these steps:
+
+1. Ensure that the `permissions` key is correctly set in your workflow file as shown in the example above.
+
+2. If you're still having issues, check the permissions of the GitHub token:
+   - Go to your repository's Settings
+   - Navigate to Actions > General
+   - Scroll down to "Workflow permissions"
+   - Ensure that "Read and write permissions" is selected for the GITHUB_TOKEN
+
+3. Make sure your workflow file is correctly configured and the `token` input is properly set to `${{ secrets.GITHUB_TOKEN }}`.
+
+If problems persist, please open an issue in the Gas Diff Action repository with details about the error and your configuration.
 
 ## Contributing
 
