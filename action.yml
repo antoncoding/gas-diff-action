@@ -83,7 +83,7 @@ runs:
     - name: Create or update comment on PR
       uses: peter-evans/create-or-update-comment@v3
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ inputs.token }}
         comment-id: ${{ steps.fc.outputs.comment-id }}
         issue-number: ${{ github.event.pull_request.number }}
         body-path: 'comparison_output.txt'
